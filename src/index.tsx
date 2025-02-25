@@ -2,6 +2,18 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
+
+// Extend the Window interface to include progressierAppRuntimeSettings
+declare global {
+  interface Window {
+    progressierAppRuntimeSettings: {
+      uid: string;
+      icon512: string;
+      name: string;
+      shortName: string;
+    };
+  }
+}
 import * as Sentry from '@sentry/browser';
 
 Sentry.init({
@@ -26,7 +38,10 @@ window.progressierAppRuntimeSettings = {
 let progressierScript = document.createElement('script');
 progressierScript.setAttribute('src', 'https://progressier.app/z8yY3IKmfpDIw3mSncPh/script.js');
 progressierScript.setAttribute('defer', 'true');
-document.querySelector('head').appendChild(progressierScript);
+const headElement = document.querySelector('head');
+if (headElement) {
+  headElement.appendChild(progressierScript);
+}
 
 // Umami Analytics
 if (import.meta.env.VITE_PUBLIC_APP_ENV !== 'development') {
